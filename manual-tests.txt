@@ -61,4 +61,14 @@ Use `./build.sh` to build CiCo and `./run.sh` to run it if using the command lin
 ## Expected results
 * Should display "Developer" for the user name.
 
+# Module 4: Error Prevention
+
+## Test Steps
+1. Build and run CiCo
+2. Enter abcd into the field and update
+
+## Expected results
+* Should ignore and not allow non-numerical input
+
+
 
