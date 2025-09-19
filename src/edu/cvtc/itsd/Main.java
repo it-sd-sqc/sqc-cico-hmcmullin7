@@ -41,23 +41,42 @@ public class Main {
     public void insertString(FilterBypass fb, int offset, String stringToAdd, AttributeSet attr)
         throws BadLocationException
     {
-      if (fb.getDocument() != null) {
-        super.insertString(fb, offset, stringToAdd, attr);
+      StringBuilder sb = new StringBuilder();
+
+      for (int i = 0; i < stringToAdd.length(); i++) {
+        char c = stringToAdd.charAt(i);
+        if (Character.isDigit(c)) {
+          sb.append(c);
+        }
+        else {
+          Toolkit.getDefaultToolkit().beep();
+        }
       }
-      else {
-        Toolkit.getDefaultToolkit().beep();
+
+      if (sb.length() > 0) {
+        super.insertString(fb, offset, sb.toString(), attr);
       }
+
     }
 
     @Override
     public void replace(FilterBypass fb, int offset, int lengthToDelete, String stringToAdd, AttributeSet attr)
         throws BadLocationException
     {
-      if (fb.getDocument() != null) {
-        super.replace(fb, offset, lengthToDelete, stringToAdd, attr);
+      StringBuilder sb = new StringBuilder();
+
+      for (int i = 0; i < stringToAdd.length(); i++) {
+        char c = stringToAdd.charAt(i);
+        if (Character.isDigit(c)) {
+          sb.append(c);
+        }
+        else {
+          Toolkit.getDefaultToolkit().beep();
+        }
       }
-      else {
-        Toolkit.getDefaultToolkit().beep();
+
+      if (sb.length() > 0) {
+        super.replace(fb, offset, lengthToDelete, sb.toString(), attr);
       }
     }
   }
