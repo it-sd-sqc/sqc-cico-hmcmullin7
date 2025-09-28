@@ -110,6 +110,7 @@ public class Main {
         statementUpdateMember.close();
         statementUpdateLog.close();
         db.close();
+       //  setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         System.out.println("Clean shutdown");
       }
       catch (SQLException e) {
@@ -170,6 +171,7 @@ public class Main {
 
         updateStateLabels(name, currentState == 1);
         scheduleTransitionFrom(CARD_STATE, null);
+
       }
       else {
         showError(ERROR_NOT_FOUND);
@@ -213,6 +215,7 @@ public class Main {
     timeout = new Timeout();
     timer.schedule(timeout, TIMEOUT_PANEL_MS);
     ((CardLayout)deck.getLayout()).show(deck, fromCard);
+
     if (toFocus != null) {
       toFocus.grabFocus();
     }
@@ -307,6 +310,17 @@ public class Main {
     labelState.setAlignmentX(JComponent.CENTER_ALIGNMENT);
     labelState.setForeground(Color.magenta);
     panelStatus.add(labelState);
+
+    JButton skipButton = new JButton("Skip Timeout");
+    skipButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+    skipButton.setForeground(Color.blue);
+    skipButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        timeout.cancel();
+        timeout = null;
+      }
+    });
+    panelStatus.add(skipButton);
 
     panelStatus.add(Box.createVerticalGlue());
 
