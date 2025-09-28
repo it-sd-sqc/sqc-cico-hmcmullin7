@@ -70,5 +70,15 @@ Use `./build.sh` to build CiCo and `./run.sh` to run it if using the command lin
 ## Expected results
 * Should ignore and not allow non-numerical input
 
+# Module 5: User Control & Freedom
+
+## Test Steps
+1. Build and run CiCo
+2. Enter card number and click update
+3. Wait 11 seconds
+
+## Expected Results
+* After step 2 a skip timeout button should appear
+
 
 
