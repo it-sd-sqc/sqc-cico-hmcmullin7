@@ -38,27 +38,37 @@ public class Main {
     private static final int MAX_LENGTH = 8;
 
     @Override
-    public void insertString(FilterBypass fb, int offset, String stringToAdd, AttributeSet attr)
+    public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr)
         throws BadLocationException
     {
-      if (fb.getDocument() != null) {
-        super.insertString(fb, offset, stringToAdd, attr);
-      }
-      else {
-        Toolkit.getDefaultToolkit().beep();
-      }
+      if (fb.getDocument() == null || text == null || text.isEmpty())
+        return;
+
+      String digits = text.replaceAll("\\D", "");
+      int curLen = fb.getDocument().getLength();
+      int room = MAX_LENGTH - curLen;
+      if (room <= 0) return;
+
+      String toInsert = digits.substring(0, Math.min(room, digits.length()));
+      if (!toInsert.isEmpty()) super.insertString(fb, offset, toInsert, attr);
     }
 
     @Override
-    public void replace(FilterBypass fb, int offset, int lengthToDelete, String stringToAdd, AttributeSet attr)
-        throws BadLocationException
-    {
-      if (fb.getDocument() != null) {
-        super.replace(fb, offset, lengthToDelete, stringToAdd, attr);
+    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attr)
+        throws BadLocationException {
+      if (fb.getDocument() == null)
+        return;
+
+      String add = (text == null) ? "" : text.replaceAll("\\D", "");
+
+      int curLen = fb.getDocument().getLength();
+      int newLenIfAll = curLen - length + add.length();
+      if (newLenIfAll > MAX_LENGTH) {
+        int allowed = MAX_LENGTH - (curLen - length);
+        if (allowed < 0) allowed = 0;
+        add = add.substring(0, Math.min(allowed, add.length()));
       }
-      else {
-        Toolkit.getDefaultToolkit().beep();
-      }
+      super.replace(fb, offset, length, add, attr);
     }
   }
 
@@ -110,6 +120,8 @@ public class Main {
   // Timer variables //////////////////////////////////////////////////////////
   static java.util.Timer timer;
   static Timeout timeout;
+
+  static boolean autoSubmitting = false;
 
   // Database and SQL variables ///////////////////////////////////////////////
   static Connection db;
@@ -253,6 +265,34 @@ public class Main {
     fieldNumber = new JTextField();
     InputFilter filter = new InputFilter();
     ((AbstractDocument)(fieldNumber.getDocument())).setDocumentFilter(filter);
+    fieldNumber.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+      private boolean allDigits(String s) { return !s.isEmpty() && s.chars().allMatch(Character::isDigit); }
+
+      private void maybeAutoSubmit() {
+        javax.swing.SwingUtilities.invokeLater(() -> {
+          String s;
+          try {
+            s = fieldNumber.getDocument().getText(0, fieldNumber.getDocument().getLength()).trim();
+          } catch (javax.swing.text.BadLocationException e) {
+            return;
+          }
+          if (s.length() == 8 && allDigits(s)) {
+            if (!autoSubmitting) {
+              autoSubmitting = true;
+              try {
+                processCard();
+              } finally {
+                autoSubmitting = false;
+              }
+            }
+          }
+        });
+      }
+
+      @Override public void insertUpdate(javax.swing.event.DocumentEvent e) { maybeAutoSubmit(); }
+      @Override public void removeUpdate(javax.swing.event.DocumentEvent e) { /* no auto on delete */ }
+      @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { /* not used for plain text */ }
+    });
     fieldNumber.setPreferredSize(new Dimension(200, 32));
     fieldNumber.setMaximumSize(new Dimension(200, 32));
     fieldNumber.setAlignmentX(JComponent.CENTER_ALIGNMENT);
