@@ -61,4 +61,11 @@ Use `./build.sh` to build CiCo and `./run.sh` to run it if using the command lin
 ## Expected results
 * Should display "Developer" for the user name.
 
+# Module 6: Ticket 601: Auto submit after last digit
 
+## Test steps
+1. Build and run CiCo.
+2. Enter 00000000 into the field
+
+## Expected results
+* Should display "Developer Checked IN".
