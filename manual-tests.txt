@@ -39,7 +39,6 @@ Use `./build.sh` to build CiCo and `./run.sh` to run it if using the command lin
 ## Expected results
 * The version number should be displayed after "CiCo" at the bottom.
 
-
 # Module 3: Visibility of system status 
 
 ## Test steps
@@ -80,5 +79,11 @@ Use `./build.sh` to build CiCo and `./run.sh` to run it if using the command lin
 ## Expected Results
 * After step 2 a skip timeout button should appear
 
+# Module 6: Ticket 601: Auto submit after last digit
 
+## Test steps
+1. Build and run CiCo.
+2. Enter 00000000 into the field
 
+## Expected results
+* Should display "Developer Checked IN".
