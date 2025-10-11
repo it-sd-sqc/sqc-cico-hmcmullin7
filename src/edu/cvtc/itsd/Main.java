@@ -332,11 +332,11 @@ public class Main {
       labelState.setForeground(Color.magenta);
       panelStatus.add(labelState);
 
-      JButton homeButton = new JButton("Home");
-      homeButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-      homeButton.addActionListener(handler);
-      homeButton.setForeground(Color.gray);
-      panelStatus.add(homeButton);
+      JButton skipButton = new JButton("Skip Timeout");
+      skipButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+      skipButton.addActionListener(handler);
+      skipButton.setForeground(Color.gray);
+      panelStatus.add(skipButton);
 
 
       panelStatus.add(Box.createVerticalGlue());
