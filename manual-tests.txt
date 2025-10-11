@@ -73,7 +73,7 @@ Use `./build.sh` to build CiCo and `./run.sh` to run it if using the command lin
 
 ## Test Steps
 1. Build and run CiCo
-2. Enter card number and click update
+2. Enter card number 00000000 and click update
 3. Wait 11 seconds
 
 ## Expected Results
